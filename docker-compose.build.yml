@@ -1,0 +1,10 @@
+version: "3"
+services:
+
+  my_blog:
+    container_name: my_blog
+    build:
+      context: .
+      dockerfile: dockerfile
+    volumes:
+      - ./dist:/dist

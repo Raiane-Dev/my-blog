@@ -19,3 +19,15 @@ services:
       - 5432:5432
     restart: unless-stopped
     network_mode: host
+
+  frontend:
+    container_name: frontend
+    image: node:alpine
+    volumes:
+      - ./frontend/:/app
+    ports:
+      - 3000:3000
+    tty: true
+    stdin_open: true
+    restart: always
+    network_mode: host
