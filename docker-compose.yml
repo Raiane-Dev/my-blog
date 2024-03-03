@@ -5,6 +5,7 @@ services:
     image: rust:latest
     volumes:
     - ./backend/:/usr/src/my_blog
+    - ./frontend/public/:/usr/src/my_blog/public
     tty: true
     stdin_open: true
     restart: always

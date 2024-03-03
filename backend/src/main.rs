@@ -1,6 +1,3 @@
-#![feature(decl_macro, proc_macro_hygiene)]
-#![allow(proc_macro_derive_resolution_fallback, unused_attributes)]
-
 #[macro_use] 
 extern crate rocket;
 
@@ -15,17 +12,21 @@ mod entities;
 
 
 
-fn init() {
-
+async fn init() -> Result<(), sqlx::Error> {
+    let _db = database::Database::new().await?;
+    Ok(())
 }
 
 #[rocket::main]
 async fn main() -> Result<(), rocket::Error> {
-    self::init();
+    let _ = init().await;
 
     let _rocket = rocket::build()
-    .mount("/api/v1", routes![controller::post_controller::get_posts])
-    .mount("/*", rocket::fs::FileServer::from("public"))
+    .mount("/api/v1", routes![
+        controller::post_controller::get_posts,
+        controller::post_controller::new_post,
+    ])
+    .mount("/", rocket::fs::FileServer::from("public"))
     .launch()
     .await?;
 

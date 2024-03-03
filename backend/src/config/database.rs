@@ -1,18 +1,21 @@
 use std::env;
+use sqlx::{postgres::PgPoolOptions, Pool, Postgres, PgConnectOptions};
+use lazy_static::lazy_static;
 
-use sqlx::postgres::PgPoolOptions;
-use sqlx::{Pool, Postgres};
 
-#[tokio::main]
-pub async fn connect() -> Pool<Postgres> {
+lazy_static! {
+    static ref POOL: PgPool = {
+        let opt = PgConnectOptions::new()
+        .host("localhost")
+        .port(5432)
+        .username("test")
+        .password("test")
+        .database("test")
+    };
 
-    let database_url = env::var("DATABASE_URL").unwrap();
-
-    let pool = PgPoolOptions::new()
-        .max_connections(5)
-        .connect(&database_url)
-        .await
-        .unwrap();
-
-    return pool;
+    PgPoolOptions::new()
+    .max_connections(5)
+    .connect_with(opt)
+    .await
+    .unwrap()
 }

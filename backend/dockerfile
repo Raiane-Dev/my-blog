@@ -26,8 +26,8 @@ RUN apk update && apk add zip
 COPY --from=build /usr/src/my-blog/target .
 COPY --from=interface /usr/src/app/build ./public/
 
-RUN zip -r birthday.zip /Birthday/*
+RUN zip -r myblog.zip /MyBlog/*
 
 VOLUME /dist/
 
-CMD cp birthday.zip /dist/
+CMD cp myblog.zip /dist/
