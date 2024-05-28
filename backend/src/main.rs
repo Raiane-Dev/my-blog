@@ -1,3 +1,6 @@
+#![allow(unused_imports)]
+#![allow(dead_code)]
+
 #[macro_use] 
 extern crate rocket;
 
@@ -12,9 +15,7 @@ mod entities;
 
 
 
-async fn init() -> Result<(), sqlx::Error> {
-    let _db = database::Database::new().await?;
-    Ok(())
+async fn init() {
 }
 
 #[rocket::main]

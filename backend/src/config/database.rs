@@ -1,21 +1,22 @@
 use std::env;
-use sqlx::{postgres::PgPoolOptions, Pool, Postgres, PgConnectOptions};
+use sqlx::{postgres::PgPoolOptions, PgPool, Pool, Postgres, ConnectOptions};
 use lazy_static::lazy_static;
 
 
 lazy_static! {
-    static ref POOL: PgPool = {
-        let opt = PgConnectOptions::new()
-        .host("localhost")
-        .port(5432)
-        .username("test")
-        .password("test")
-        .database("test")
+    pub static ref INSTANCE: PgPool = {
+        let pool = async {
+            PgPoolOptions::new()
+                .max_connections(5)
+                .connect("postgresql://test:test@localhost/test")
+                .await
+                .expect("Failed to create pool")
+        };
+        
+        tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()
+            .unwrap()
+            .block_on(pool)
     };
-
-    PgPoolOptions::new()
-    .max_connections(5)
-    .connect_with(opt)
-    .await
-    .unwrap()
 }

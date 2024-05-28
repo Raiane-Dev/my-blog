@@ -1,6 +1,6 @@
 use std::io::{self, Read};
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use rocket::http::Status;
 use rocket::request::{self, Request};
 use rocket::data::{self, Data, FromData, ToByteUnit};
@@ -12,6 +12,7 @@ pub enum Error {
     InvalidBody,
 }
 
+#[derive(Serialize, Deserialize)]
 pub struct PostInput {
     pub title: String, 
     pub body: String,
