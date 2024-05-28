@@ -3,3 +3,11 @@ CREATE TABLE IF NOT EXISTS posts (
     title TEXT NOT NULL, 
     body TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL NOT NULL PRIMARY KEY,
+    username VARCHAR(255) NOT NULL, 
+    email VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50)
+);

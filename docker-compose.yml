@@ -20,6 +20,8 @@ services:
       - 5432:5432
     restart: unless-stopped
     network_mode: host
+    volumes:
+      - ./db/:/docker-entrypoint-initdb.d/
 
   frontend:
     container_name: frontend
