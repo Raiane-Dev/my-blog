@@ -1,9 +1,8 @@
 use chrono::Utc;
-use jsonwebtoken::{encode, decode, EncodingKey, Algorithm, Header, Validation}; 
+use rocket::serde::{Serialize, Deserialize};
+use jsonwebtoken::{encode, decode, EncodingKey, DecodingKey, Algorithm, Header, Validation}; 
 use jsonwebtoken::errors::{Error, ErrorKind};
 use std::env;
-use dotenvy::dotenv;
-
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Claims {
@@ -32,7 +31,7 @@ pub fn create_jwt(id: i32) -> Result<String, Error> {
 
 }
 
-fn decode_jwt(token: String) -> Result<Claims, ErrorKind> {
+pub fn decode_jwt(token: String) -> Result<Claims, ErrorKind> {
     let secret = env::var("JWT_SECRET").expect("JWT_SECRET must be set.");
     let token = token.trim_start_matches("Bearer").trim();
 

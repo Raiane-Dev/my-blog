@@ -7,6 +7,7 @@ use crate::entities::io::input::post_entity::PostInput;
 use crate::entities::io::output::post_entity::PostOutput;
 use crate::entities::io::output::error_entity::ErrorResponse;
 use crate::entities::schemas::post_schema::PostSchema;
+use crate::entities::io::output::api_entity::{NetworkResponse, Response, ResponseBody};
 
 
 #[get("/posts")]
@@ -39,7 +40,7 @@ pub async fn get_post(_id: String) -> Result<status::Custom<Json<PostOutput>>, s
     Ok(status::Custom(Status::Ok, Json(post_output)))
 }
 
-#[post("/new-post", data = "<input>")]
-pub fn new_post(input: PostInput) {
+#[post("/new-post", format = "application/json", data = "<input>")]
+pub fn new_post(input: Json<PostInput>) {
 
 }

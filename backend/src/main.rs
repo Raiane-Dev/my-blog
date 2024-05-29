@@ -7,13 +7,14 @@ extern crate rocket;
 use std::env;
 use controller::*;
 use config::*;
+use rocket_okapi::openapi_get_routes;
 
 mod config;
 mod model;
 mod controller;
 mod entities;
-
-
+mod utils;
+mod fairings;
 
 async fn init() {
 }
@@ -23,9 +24,11 @@ async fn main() -> Result<(), rocket::Error> {
     let _ = init().await;
 
     let _rocket = rocket::build()
+    .attach(fairings::cors::CORS)
     .mount("/api/v1", routes![
         controller::post_controller::get_posts,
         controller::post_controller::new_post,
+        controller::auth_controller::login,
     ])
     .mount("/", rocket::fs::FileServer::from("public"))
     .launch()
