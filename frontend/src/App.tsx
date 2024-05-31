@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {  FC } from 'react';
+import { ConfigProvider, Layout } from 'antd';
+import { Routes, Route } from 'react-router-dom';
+import pt_br from 'antd/locale/pt_BR'
+import './App.less'
+import Home from './components/Home';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Article from './components/Article';
 
-function App() {
+const App: FC = () => {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <ConfigProvider locale={pt_br}>
+                <>
+                <Layout className='layout-pattern'>
+                  <Header />
+                    <Layout>
+                        <Layout.Content className='content-pattern'>
+                      <Routes>
+                        <Route path="/home" element={<Home />} />
+                        <Route path="/post/:post_id" element={<Article />} />
+                      </Routes>
+                    </Layout.Content>
+                    <Footer />
+                  </Layout>
+                </Layout>
+                </>
+      </ConfigProvider>
+    </>
   );
-}
+};
 
 export default App;

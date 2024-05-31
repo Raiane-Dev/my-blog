@@ -26,6 +26,8 @@ async fn main() -> Result<(), rocket::Error> {
     let _rocket = rocket::build()
     .attach(fairings::cors::CORS)
     .mount("/api/v1", routes![
+        controller::post_cover_controller::get_cover_posts,
+        controller::post_controller::get_post,
         controller::post_controller::get_posts,
         controller::post_controller::new_post,
         controller::auth_controller::login,

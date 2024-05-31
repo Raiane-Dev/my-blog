@@ -32,7 +32,7 @@ pub async fn get_posts() -> Result<status::Custom<Json<Vec<PostOutput>>>, status
 
 #[get("/post/<_id>")]
 pub async fn get_post(_id: String) -> Result<status::Custom<Json<PostOutput>>, status::Custom<Json<ErrorResponse>>> {
-    let post: PostSchema = crate::model::post_model::select_one("id = ?".to_string(), vec!["1"])
+    let post: PostSchema = crate::model::post_model::select_one("id = $1::integer".to_string(), vec![&_id])
     .await.unwrap();
 
     let post_output: PostOutput = post.into();
