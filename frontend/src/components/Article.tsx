@@ -1,8 +1,9 @@
-import { Breadcrumb, Card, Divider, Row, Typography } from 'antd';
+import { Breadcrumb, Divider, Row, Typography } from 'antd';
 import { Content } from "antd/es/layout/layout";
 import { useEffect, useState } from "react";
 import apiService from "../services/apiService";
 import { PostPattern } from '../models/post';
+import { RenderHTML } from './Render';
 
 const Article = () => {
 
@@ -46,7 +47,7 @@ const Article = () => {
 
                 <Row gutter={16}>
                     <Typography.Paragraph>
-                        {data.body}
+                        <RenderHTML html={data.body} />
                     </Typography.Paragraph>
                 </Row>
             </Content>

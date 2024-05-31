@@ -20,5 +20,3 @@ CREATE TABLE IF NOT EXISTS post_cover (
     image_path VARCHAR(255) NOT NULL,
     CONSTRAINT fk_post_id FOREIGN KEY(post_id) REFERENCES posts(id)
 );
-
-INSERT INTO post_cover (post_id, headline, description, image_path) VALUES (1, "Test", "test description", "/assets/mylogo.png")
