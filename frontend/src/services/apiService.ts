@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiService = axios.create({
-  baseURL: "http://localhost:8000/api/v1",
+  baseURL: window.location.origin + "/api/v1",
 });
 
 export const get = (endpoint: string) => apiService.get(endpoint);

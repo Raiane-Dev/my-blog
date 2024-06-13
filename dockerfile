@@ -1,3 +1,15 @@
+FROM node:latest AS interface
+
+WORKDIR /usr/src/app
+
+COPY frontend/package.json frontend/yarn.lock ./
+
+RUN yarn
+
+COPY ./frontend .
+
+RUN yarn build:prod
+
 FROM rust:latest as build
 
 ENV PATH_ZIP="my_blog"
@@ -25,10 +37,13 @@ WORKDIR /my_blog
 
 ## execs
 COPY --from=build /usr/src/my_blog/target/release/main .
+COPY --from=interface /usr/src/app/build ./public/
 
 # assets
 COPY ./config.toml .
 COPY ./assets/ assets
+COPY myblog.service .
+RUN mkdir images/
 
 RUN zip -r ${PATH_ZIP}.zip /my_blog
 

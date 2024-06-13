@@ -55,3 +55,19 @@ pub async fn select_one(condition: String, args: Vec<&str>) -> Result<PostSchema
 
     result
 }
+
+pub async fn delete_post(post_id: i32) -> Result<(), sqlx::Error> {
+    let pool = get_db_pool().await;
+
+    let _ = sqlx::query!(
+        r#"
+            DELETE FROM posts
+            WHERE id = $1
+        "#,
+        post_id
+    )
+    .execute(pool)
+    .await?;
+
+    Ok(())
+}

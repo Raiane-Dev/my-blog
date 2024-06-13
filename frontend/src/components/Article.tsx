@@ -36,7 +36,7 @@ const Article = () => {
             <Content style={{ padding: '0 48px' }}>
                 <Breadcrumb style={{ margin: '16px 0' }}>
                     <Breadcrumb.Item>
-                        <Link to=".." relative="path">
+                        <Link to="/" relative="path">
                         posts 
                         </Link>
                          / {lower_str(data.title)}

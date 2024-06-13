@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import apiService from "../services/apiService"
 
-import { SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined, DeleteOutlined, SmileOutlined, MehOutlined } from '@ant-design/icons';
 import type { TableColumnType } from 'antd';
-import { Button, Input, Space, Table } from 'antd';
+import { Button, Input, Space, Table, Row, Col, notification } from 'antd';
 import type { FilterDropdownProps } from 'antd/es/table/interface';
 import Highlighter from 'react-highlight-words';
 
 
+let i = 0;
 interface Client {
     id?: number;
     name: string,
@@ -39,6 +40,27 @@ const ListPosts = () => {
         clearFilters();
         setSearchText('');
     };
+
+    const handleDelete = (record: any) => {
+        apiService.del(
+            "/post/" + record.id,
+        ).then((response: any) => {
+            setMutex(i++)
+            notification.open({
+                message: response.statusText,
+                icon: <SmileOutlined style={{ color: '#108ee9' }} />,
+            });
+
+        })
+            .catch(err => {
+                notification.open({
+                    message: err.response?.statusText ?? "Unable to create",
+                    icon: <MehOutlined />,
+                });
+            })
+
+    };
+
 
     const search = (dataIndex: any): TableColumnType<any> => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
@@ -113,7 +135,7 @@ const ListPosts = () => {
     });
 
     useEffect(() => {
-        apiService.get("/list-posts")
+        apiService.get("/posts")
             .then(response => {
                 setData(response.data);
             })
@@ -126,9 +148,27 @@ const ListPosts = () => {
         {
             title: 'Title',
             dataIndex: 'title',
-            key: 'body',
+            key: 1,
             ...search('body'),
         },
+        {
+            title: 'Description',
+            dataIndex: 'description',
+            key: 3,
+            ...search('description'),
+        },
+        {
+            title: '#',
+            dataIndex: '#',
+            key: 2,
+            render: (_: any, record: any) => (
+                <Row className='mr-1'>
+                    <Col offset={2}>
+                        <Button icon={<DeleteOutlined />} onClick={() => handleDelete(record)} ></Button>
+                    </Col>
+                </Row>
+            ),
+        }
     ];
 
     return (

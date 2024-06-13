@@ -46,7 +46,7 @@ const Home = () => {
                             <Card
                                 cover={<img alt={post.image_path} src={"/images/" + post.image_path} />}
                             >
-                                <Meta title={post.title} description={post.description} />
+                                <Meta title={post.title} description={post.description.substring(0, 50)} />
                             </Card>
                         </a>
                     </Col>

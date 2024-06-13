@@ -38,7 +38,7 @@ const custom_config = {
 
 function MyCustomUploadAdapterPlugin(editor: any) {
     editor.plugins.get("FileRepository").createUploadAdapter = (loader: any) => {
-        return new UploadAdapter(loader, "http://localhost:8000/api/v1/upload");
+        return new UploadAdapter(loader, "/api/v1/upload");
     }
 }
 
@@ -49,7 +49,7 @@ const FormPost = () => {
     const props: UploadProps = {
         name: 'file',
         multiple: false,
-        action: 'http://localhost:8000/api/v1/upload',
+        action: '/api/v1/upload',
         onChange(info) {
 
             const { status } = info.file;

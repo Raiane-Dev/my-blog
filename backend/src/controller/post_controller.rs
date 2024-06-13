@@ -45,9 +45,8 @@ pub async fn get_post(_id: &str) -> Result<status::Custom<Json<PostOutput>>, sta
     Ok(status::Custom(Status::Ok, Json(post_output)))
 }
 
-// pub fn new_post(auth: JWT, input: Json<PostInput>) -> std::io::Result<String>
 #[post("/new-post", format = "application/json", data = "<input>")]
-pub async fn new_post(input: Json<PostInput>) -> Result<String, NetworkResponse>
+pub async fn new_post(auth: JWT, input: Json<PostInput>) -> Result<String, NetworkResponse>
 {
     match crate::model::post_model::create(input.into_inner())
     .await {
@@ -63,8 +62,7 @@ pub async fn new_post(input: Json<PostInput>) -> Result<String, NetworkResponse>
 }
 
 #[post("/upload", data = "<data>")]
-// pub async fn upload(auth: JWT, content_type: &ContentType, data: Data<'_>) -> std::io::Result<String> {
-pub async fn upload(content_type: &ContentType, data: Data<'_>) -> std::io::Result<String> {
+pub async fn upload(auth: JWT, content_type: &ContentType, data: Data<'_>) -> std::io::Result<String> {
     let options = MultipartFormDataOptions::with_multipart_form_data_fields(
         vec![
             MultipartFormDataField::file("file").size_limit(20 * 1024 * 1024),
@@ -80,4 +78,20 @@ pub async fn upload(content_type: &ContentType, data: Data<'_>) -> std::io::Resu
     }
 
     Ok("File uploaded successfully".to_string())
+}
+
+
+
+#[delete("/post/<post_id>")]
+pub async fn delete_post_handler(post_id: i32) -> Result<String, NetworkResponse> {
+    match crate::model::post_model::delete_post(post_id).await {
+        Ok(result) => {
+            let response = Response {body: ResponseBody::Message("success".to_string())};
+            Ok(serde_json::to_string(&response).unwrap())
+        },
+        Err(err) => {
+            println!("{}", err);
+            return Err(NetworkResponse::BadRequest(err.to_string()));
+        }
+    }
 }

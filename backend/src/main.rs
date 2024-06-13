@@ -37,6 +37,7 @@ async fn main() -> Result<(), rocket::Error> {
                 controller::post_controller::get_post,
                 controller::post_controller::get_posts,
                 controller::post_controller::new_post,
+                controller::post_controller::delete_post_handler,
                 controller::auth_controller::login,
             ],
         )
