@@ -16,6 +16,8 @@ pub enum Error {
 pub struct PostInput {
     pub title: String, 
     pub body: String,
+    pub image_path: String,
+    pub description: String
 }
 
 
@@ -26,7 +28,7 @@ impl<'r> FromData<'r> for PostInput {
     async fn from_data(req: &'r Request<'_>, data: Data<'r>) -> data::Outcome<'r, Self> {
         use Error::*;
 
-        Outcome::Success(PostInput{ title: "".to_string(), body: "".to_string()})
+        Outcome::Success(PostInput{ title: "".to_string(), body: "".to_string(), image_path: "".to_string(), description: "".to_string()})
 
     }
 }

@@ -1,7 +1,7 @@
 type AccountInput = {
     username?: string;
     email?: string;
-    password?: string;
+    plain_password?: string;
 };
 
 export default AccountInput;

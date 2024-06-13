@@ -1,4 +1,4 @@
-import { Breadcrumb, Card, Divider, Row, Typography } from 'antd';
+import { Breadcrumb, Card, Col, Divider, Row, Typography } from 'antd';
 import { Content } from "antd/es/layout/layout";
 import { useEffect, useState } from "react";
 import apiService from "../services/apiService";
@@ -10,7 +10,7 @@ const Home = () => {
 
 
     const Posts = () => {
-        apiService.get("/covers")
+        apiService.get("/posts")
             .then(response => {
                 setData(response.data);
             })
@@ -39,16 +39,17 @@ const Home = () => {
             </Typography.Title>
 
             <Content className='content'>
-                <Row gutter={16}>
+                <Row gutter={16} justify="space-between" align="top">
                     {data.map((post: any) => (
-                        <a href={"/post/" + post.post_id}>
+                    <Col span={8} style={{ marginBottom: "1em" }}>
+                        <a href={"/post/" + post.id}>
                             <Card
-                                style={{ width: 240 }}
-                                cover={<img alt={post.image_path} src={post.image_path} />}
+                                cover={<img alt={post.image_path} src={"/images/" + post.image_path} />}
                             >
-                                <Meta title={post.headline} description={post.description} />
+                                <Meta title={post.title} description={post.description} />
                             </Card>
                         </a>
+                    </Col>
                     ))}
                 </Row>
             </Content>

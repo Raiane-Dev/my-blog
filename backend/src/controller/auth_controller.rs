@@ -3,33 +3,45 @@ use crate::entities::io::output::api_entity::{NetworkResponse, Response, Respons
 use crate::entities::schemas::user_schema::UserSchema;
 use crate::utils::jwt::{create_jwt, decode_jwt, Claims, JWT};
 use jsonwebtoken::errors::{Error, ErrorKind};
-use jsonwebtoken::{decode, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
+use jsonwebtoken::{decode, encode, Algorithm, DecodingKey, TokenData, EncodingKey, Header, Validation};
 use rocket::http::Status;
-use rocket::request::{FromRequest, Outcome, Request};
+use rocket::http::{Cookie, CookieJar};
+use rocket::request::{self, FromRequest, Outcome, Request};
 use rocket::serde::json::serde_json;
 use rocket::serde::json::Json;
+
+use serde::Deserialize;
 
 #[rocket::async_trait]
 impl<'r> FromRequest<'r> for JWT {
     type Error = NetworkResponse;
 
-    async fn from_request(req: &'r Request<'_>) -> Outcome<Self, NetworkResponse> {
+    async fn from_request(req: &'r Request<'_>) -> request::Outcome<Self, NetworkResponse> {
         fn is_valid(key: &str) -> Result<Claims, Error> {
-            Ok(decode_jwt(String::from(key))?)
+            let token_data: TokenData<Claims> = decode::<Claims>(
+                key,
+                &DecodingKey::from_secret("secret".as_ref()),
+                &Validation::default()
+            )?;
+            Ok(token_data.claims)
         }
 
         match req.headers().get_one("authorization") {
-            None => todo!(),
+            None => Outcome::Error((Status::Unauthorized, NetworkResponse::Unauthorized("Not authorized".to_string()))),
             Some(key) => match is_valid(key) {
                 Ok(claims) => Outcome::Success(JWT { claims }),
-                Err(err) => todo!()
+                Err(err) => {
+                    println!("{}", err);
+                    let response = Response { body: ResponseBody::Message(format!("Error validating JWT token - {}", err))};
+                    Outcome::Error((Status::Unauthorized, NetworkResponse::Unauthorized(serde_json::to_string(&response).unwrap())))
+                },
             },
         }
     }
 }
 
 #[post("/login", format = "application/json", data = "<input>")]
-pub async fn login(input: Json<AuthenticateRequest>) -> Result<String, NetworkResponse> {
+pub async fn login(jar: &CookieJar<'_>, input: Json<AuthenticateRequest>) -> Result<String, NetworkResponse> {
     let response: Response;
 
     let user = match crate::model::user_model::select_one(
@@ -42,15 +54,14 @@ pub async fn login(input: Json<AuthenticateRequest>) -> Result<String, NetworkRe
             let token = create_jwt(user.id).unwrap();
 
             response = Response {
-                body: ResponseBody::AuthToken(token),
-            };
-        }
-        Err(error) => {
-            response = Response {
-                body: ResponseBody::Message("failed login".to_string()),
+                body: ResponseBody::AuthToken(token.clone()),
             };
 
-            println!("{}", error)
+            jar.add(Cookie::build(("x-access-token", token)).expires(None));
+        }
+        Err(err) => {
+            println!("{}", err);
+            return Err(NetworkResponse::BadRequest(err.to_string()));
         }
     };
 

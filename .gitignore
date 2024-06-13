@@ -1,1 +1,4 @@
 dist/
+backend/.env
+frontend/.env.prod
+backend/public

@@ -10,13 +10,15 @@ pub async fn create(data: PostInput) -> Result<PgRow, sqlx::Error> {
 
     let created_id = sqlx::query(
         r#"
-            INSERT INTO posts (title, body)
-            VALUES ($1, $2)
+            INSERT INTO posts (title, body, image_path, description)
+            VALUES ($1, $2, $3, $4)
             RETURNING id
         "#,
     )
     .bind(data.title)
     .bind(data.body)
+    .bind(data.image_path)
+    .bind(data.description)
     .fetch_one(pool)
     .await?;
 

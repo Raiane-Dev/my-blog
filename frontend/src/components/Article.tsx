@@ -1,22 +1,24 @@
 import { Breadcrumb, Divider, Row, Typography } from 'antd';
 import { Content } from "antd/es/layout/layout";
 import { useEffect, useState } from "react";
-import apiService from "../services/apiService";
+import apiService, { post } from "../services/apiService";
 import { PostPattern } from '../models/post';
 import { RenderHTML } from './Render';
+import { Link, useParams } from 'react-router-dom';
+
 
 const Article = () => {
 
     const [data, setData] = useState(PostPattern);
-
+    const { post_id } = useParams();
 
     const Post = () => {
-        apiService.get("/post/1")
+        apiService.get("/post/" + post_id)
             .then(response => {
                 setData(response.data);
             })
             .catch(error => {
-
+                console.log(error);
             })
     }
 
@@ -34,7 +36,10 @@ const Article = () => {
             <Content style={{ padding: '0 48px' }}>
                 <Breadcrumb style={{ margin: '16px 0' }}>
                     <Breadcrumb.Item>
-                        post / {lower_str(data.title)}
+                        <Link to=".." relative="path">
+                        posts 
+                        </Link>
+                         / {lower_str(data.title)}
                     </Breadcrumb.Item>
                 </Breadcrumb>
             </Content>
