@@ -63,7 +63,7 @@ const App: FC = () => {
                 <Route path="/post/:post_id" element={<Article />} />
               </Route>
 
-              {!isAuthenticated ? (
+              {isAuthenticated ? (
                 <Route path="/" element={<BodyPrivate />}>
                   <Route path="/dashboard/home" element={<></>} />
                   <Route path="/dashboard/create-post" element={<FormPost />} />

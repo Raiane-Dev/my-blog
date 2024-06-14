@@ -5,7 +5,7 @@ After=network.target
 [Service]
 ExecStart=/usr/local/bin/MyBlog/main
 WorkingDirectory=/usr/local/bin/MyBlog
-EnvironmentFile=/usr/local/bin/MyBlog/.env
+EnvironmentFile=/usr/local/bin/MyBlog/.env.prod
 Restart=always
 RestartSec=3
 User=root

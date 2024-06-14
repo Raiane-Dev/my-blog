@@ -1,8 +1,9 @@
-version: '3.0'
 services:
   my_blog:
     container_name: my_blog
     image: rust:latest
+    env_file:
+      - ./backend/.env.example
     volumes:
     - ./backend/:/usr/src/my_blog
     - ./frontend/public/:/usr/src/my_blog/public
@@ -15,7 +16,7 @@ services:
     container_name: postgres-db
     image: postgres:15.1-bullseye
     env_file:
-      - ./backend/.env
+      - ./backend/.env.example
     ports:
       - 5432:5432
     restart: unless-stopped

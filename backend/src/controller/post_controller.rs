@@ -83,7 +83,7 @@ pub async fn upload(auth: JWT, content_type: &ContentType, data: Data<'_>) -> st
 
 
 #[delete("/post/<post_id>")]
-pub async fn delete_post_handler(post_id: i32) -> Result<String, NetworkResponse> {
+pub async fn delete_post_handler(auth: JWT, post_id: i32) -> Result<String, NetworkResponse> {
     match crate::model::post_model::delete_post(post_id).await {
         Ok(result) => {
             let response = Response {body: ResponseBody::Message("success".to_string())};

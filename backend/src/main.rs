@@ -22,6 +22,7 @@ async fn init() {}
 #[rocket::main]
 async fn main() -> Result<(), rocket::Error> {
     let _ = init().await;
+    let server_port = env::var("SERVER_PORT").expect("SERVER_PORT must be set");
 
     let cors = CorsOptions::default()
         .allowed_origins(AllowedOrigins::all())
@@ -41,6 +42,7 @@ async fn main() -> Result<(), rocket::Error> {
                 controller::auth_controller::login,
             ],
         )
+        .configure(rocket::Config::figment().merge(("port", server_port.parse::<u16>().unwrap())))
         .mount("/", rocket::fs::FileServer::from("public"))
         .launch()
         .await?;
