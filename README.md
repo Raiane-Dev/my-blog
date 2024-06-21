@@ -1,7 +1,6 @@
 <h1 align="center">
   <br>
     <a href="#">
-    <img src="https://raiane-dev.github.io/favicon.ico" alt="Raidev" width="32"></a>
   <br>
   MyBlog
   <br>
@@ -47,7 +46,7 @@
 
 ---
 
-🙌 Contribuições
+🙌 Contribuições <br />
 Contribuições são bem-vindas! Sinta-se à vontade para abrir issues, enviar PRs ou simplesmente fazer uma telinha a mais.
 
 
