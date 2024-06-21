@@ -12,14 +12,16 @@ RUN yarn build:prod
 
 FROM rust:latest as build
 
-
 RUN apt-get update -y && \
-    apt-get upgrade -y && \
-    apt-get install zip
+    apt-get upgrade -y
 
 WORKDIR /usr/src/my_blog
 COPY ./backend .
 
+RUN rustup toolchain install nightly && \
+    rustup default nightly
+
+RUN cargo update
 RUN cargo build --release
 
 FROM alpine:latest as the_end
@@ -37,7 +39,7 @@ COPY --from=interface /usr/src/app/build ./public/
 
 # assets
 COPY myblog.service .
-COPY backend/.env.prod env
+COPY backend/.env env
 RUN mkdir images/
 
 RUN zip -r ${PATH_ZIP}.zip /my_blog

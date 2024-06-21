@@ -3,7 +3,9 @@ use crate::entities::io::output::api_entity::{NetworkResponse, Response, Respons
 use crate::entities::schemas::user_schema::UserSchema;
 use crate::utils::jwt::{create_jwt, decode_jwt, Claims, JWT};
 use jsonwebtoken::errors::{Error, ErrorKind};
-use jsonwebtoken::{decode, encode, Algorithm, DecodingKey, TokenData, EncodingKey, Header, Validation};
+use jsonwebtoken::{
+    decode, encode, Algorithm, DecodingKey, EncodingKey, Header, TokenData, Validation,
+};
 use rocket::http::Status;
 use rocket::http::{Cookie, CookieJar};
 use rocket::request::{self, FromRequest, Outcome, Request};
@@ -21,30 +23,53 @@ impl<'r> FromRequest<'r> for JWT {
             let token_data: TokenData<Claims> = decode::<Claims>(
                 key,
                 &DecodingKey::from_secret("secret".as_ref()),
-                &Validation::default()
+                &Validation::default(),
             )?;
             Ok(token_data.claims)
         }
 
         match req.headers().get_one("authorization") {
-            None => Outcome::Error((Status::Unauthorized, NetworkResponse::Unauthorized("Not authorized".to_string()))),
+            None => Outcome::Error((
+                Status::Unauthorized,
+                NetworkResponse::Unauthorized("Not authorized".to_string()),
+            )),
             Some(key) => match is_valid(key) {
                 Ok(claims) => Outcome::Success(JWT { claims }),
                 Err(err) => {
                     println!("{}", err);
-                    let response = Response { body: ResponseBody::Message(format!("Error validating JWT token - {}", err))};
-                    Outcome::Error((Status::Unauthorized, NetworkResponse::Unauthorized(serde_json::to_string(&response).unwrap())))
-                },
+                    let response = Response {
+                        body: ResponseBody::Message(format!(
+                            "Error validating JWT token - {}",
+                            err
+                        )),
+                    };
+                    Outcome::Error((
+                        Status::Unauthorized,
+                        NetworkResponse::Unauthorized(serde_json::to_string(&response).unwrap()),
+                    ))
+                }
             },
         }
     }
 }
 
+#[get("/check-auth")]
+pub async fn check_auth(_auth: JWT) -> Result<String, NetworkResponse> {
+    let response = Response {
+        body: ResponseBody::Message("check".to_string()),
+    };
+
+    Ok(serde_json::to_string(&response).unwrap())
+}
+
 #[post("/login", format = "application/json", data = "<input>")]
-pub async fn login(jar: &CookieJar<'_>, input: Json<AuthenticateRequest>) -> Result<String, NetworkResponse> {
+pub async fn login(
+    jar: &CookieJar<'_>,
+    input: Json<AuthenticateRequest>,
+) -> Result<String, NetworkResponse> {
     let response: Response;
 
-    let user = match crate::model::user_model::select_one(
+    let _user = match crate::model::user_model::select_one(
         "email = $1 AND password = $2".to_string(),
         vec![&input.email, &input.plain_password],
     )

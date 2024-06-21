@@ -25,7 +25,7 @@ pub struct PostInput {
 impl<'r> FromData<'r> for PostInput {
     type Error = Error;
 
-    async fn from_data(req: &'r Request<'_>, data: Data<'r>) -> data::Outcome<'r, Self> {
+    async fn from_data(_req: &'r Request<'_>, _data: Data<'r>) -> data::Outcome<'r, Self> {
         use Error::*;
 
         Outcome::Success(PostInput{ title: "".to_string(), body: "".to_string(), image_path: "".to_string(), description: "".to_string()})

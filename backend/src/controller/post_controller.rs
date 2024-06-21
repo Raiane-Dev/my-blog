@@ -46,7 +46,7 @@ pub async fn get_post(_id: &str) -> Result<status::Custom<Json<PostOutput>>, sta
 }
 
 #[post("/new-post", format = "application/json", data = "<input>")]
-pub async fn new_post(auth: JWT, input: Json<PostInput>) -> Result<String, NetworkResponse>
+pub async fn new_post(_auth: JWT, input: Json<PostInput>) -> Result<String, NetworkResponse>
 {
     match crate::model::post_model::create(input.into_inner())
     .await {
@@ -62,7 +62,7 @@ pub async fn new_post(auth: JWT, input: Json<PostInput>) -> Result<String, Netwo
 }
 
 #[post("/upload", data = "<data>")]
-pub async fn upload(auth: JWT, content_type: &ContentType, data: Data<'_>) -> std::io::Result<String> {
+pub async fn upload(_auth: JWT, content_type: &ContentType, data: Data<'_>) -> std::io::Result<String> {
     let options = MultipartFormDataOptions::with_multipart_form_data_fields(
         vec![
             MultipartFormDataField::file("file").size_limit(20 * 1024 * 1024),
@@ -83,9 +83,9 @@ pub async fn upload(auth: JWT, content_type: &ContentType, data: Data<'_>) -> st
 
 
 #[delete("/post/<post_id>")]
-pub async fn delete_post_handler(auth: JWT, post_id: i32) -> Result<String, NetworkResponse> {
+pub async fn delete_post_handler(_auth: JWT, post_id: i32) -> Result<String, NetworkResponse> {
     match crate::model::post_model::delete_post(post_id).await {
-        Ok(result) => {
+        Ok(_result) => {
             let response = Response {body: ResponseBody::Message("success".to_string())};
             Ok(serde_json::to_string(&response).unwrap())
         },

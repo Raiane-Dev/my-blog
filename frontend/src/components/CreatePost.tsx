@@ -1,5 +1,5 @@
 import { PostInput } from '../models/post';
-import apiService from "../services/apiService"
+import { post } from "../services/api_service"
 import { Button, Form, Input, Row, notification } from 'antd';
 import { SmileOutlined, MehOutlined } from '@ant-design/icons';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
@@ -69,7 +69,7 @@ const FormPost = () => {
     };
 
     const onFinish = (values: any) => {
-        apiService.post(
+        post(
             "/new-post",
             values,
         ).then((response: any) => {
@@ -139,7 +139,7 @@ const FormPost = () => {
                             editor={ClassicEditor}
                             data=""
                             config={custom_config}
-                            onChange={(event, editor) => {
+                            onChange={(_, editor) => {
                                 const data = editor.getData();
                                 form.setFieldsValue({ body: data });
                             }}

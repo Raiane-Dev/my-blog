@@ -6,9 +6,12 @@ extern crate rocket;
 
 use config::*;
 use controller::*;
+use rocket::fs::{FileServer, relative, NamedFile};
+use rocket_cors::{AllowedOrigins, CorsOptions};
 use rocket_okapi::openapi_get_routes;
-use rocket_cors::{CorsOptions, AllowedOrigins};
 use std::env;
+use dotenvy::dotenv;
+use std::path::{PathBuf, Path};
 
 mod config;
 mod controller;
@@ -17,7 +20,20 @@ mod fairings;
 mod model;
 mod utils;
 
-async fn init() {}
+async fn init() {
+    dotenv().ok();
+}
+
+#[get("/<_..>", rank = 2)]
+async fn index() -> Option<NamedFile> {
+    NamedFile::open(Path::new("public").join("index.html")).await.ok()
+}
+
+
+#[get("/<file..>", rank=1)]
+async fn files(file: PathBuf) -> Option<NamedFile> {
+    NamedFile::open(Path::new("public/static/").join(file)).await.ok()
+}
 
 #[rocket::main]
 async fn main() -> Result<(), rocket::Error> {
@@ -40,10 +56,12 @@ async fn main() -> Result<(), rocket::Error> {
                 controller::post_controller::new_post,
                 controller::post_controller::delete_post_handler,
                 controller::auth_controller::login,
+                controller::auth_controller::check_auth,
             ],
         )
+        .mount("/static", routes![files,])
+        .mount("/", routes![index,])
         .configure(rocket::Config::figment().merge(("port", server_port.parse::<u16>().unwrap())))
-        .mount("/", rocket::fs::FileServer::from("public"))
         .launch()
         .await?;
 

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import apiService from "../services/apiService"
+import { get, del } from "../services/api_service"
 
 import { SearchOutlined, DeleteOutlined, SmileOutlined, MehOutlined } from '@ant-design/icons';
 import type { TableColumnType } from 'antd';
@@ -42,7 +42,7 @@ const ListPosts = () => {
     };
 
     const handleDelete = (record: any) => {
-        apiService.del(
+        del(
             "/post/" + record.id,
         ).then((response: any) => {
             setMutex(i++)
@@ -63,7 +63,7 @@ const ListPosts = () => {
 
 
     const search = (dataIndex: any): TableColumnType<any> => ({
-        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }: any) => (
             <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
                 <Input
                     ref={searchInput}
@@ -135,7 +135,7 @@ const ListPosts = () => {
     });
 
     useEffect(() => {
-        apiService.get("/posts")
+        get("/posts")
             .then(response => {
                 setData(response.data);
             })

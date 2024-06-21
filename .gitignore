@@ -1,4 +1,3 @@
-dist/
-backend/.env.prod
+dist/*
 frontend/.env.prod
 backend/public

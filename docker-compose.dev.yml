@@ -1,12 +1,13 @@
 services:
   my_blog:
     container_name: my_blog
+    working_dir: /usr/src/my_blog
     image: rust:latest
     env_file:
-      - ./backend/.env.example
+      - ./backend/.env.dev
     volumes:
     - ./backend/:/usr/src/my_blog
-    - ./frontend/public/:/usr/src/my_blog/public
+    - ./frontend/build/:/usr/src/my_blog/public
     tty: true
     stdin_open: true
     restart: always
@@ -14,11 +15,9 @@ services:
 
   postgres-db:
     container_name: postgres-db
-    image: postgres:15.1-bullseye
+    image: postgres:16
     env_file:
-      - ./backend/.env.example
-    ports:
-      - 5432:5432
+      - ./backend/.env.dev
     restart: unless-stopped
     network_mode: host
     volumes:
@@ -26,11 +25,9 @@ services:
 
   frontend:
     container_name: frontend
-    image: node:alpine
+    image: node:22.3.0
     volumes:
       - ./frontend/:/app
-    ports:
-      - 3000:3000
     tty: true
     stdin_open: true
     restart: always

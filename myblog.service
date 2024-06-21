@@ -1,11 +1,11 @@
 [Unit]
-Description=Interface for Myblog
+Description=my_blog
 After=network.target
 
 [Service]
-ExecStart=/usr/local/bin/MyBlog/main
-WorkingDirectory=/usr/local/bin/MyBlog
-EnvironmentFile=/usr/local/bin/MyBlog/.env.prod
+ExecStart=/usr/local/bin/my_blog/main
+WorkingDirectory=/usr/local/bin/my_blog
+EnvironmentFile=/usr/local/bin/my_blog/.env.prod
 Restart=always
 RestartSec=3
 User=root

@@ -1,7 +1,7 @@
 import { Layout, Typography, Row, Col, Button, Space } from 'antd';
-import { InstagramOutlined, TwitterOutlined, GithubOutlined, LinkedinOutlined, LoginOutlined } from '@ant-design/icons';
+import { InstagramOutlined, TwitterOutlined, GithubOutlined, LoginOutlined } from '@ant-design/icons';
 
-const { Header, Content } = Layout;
+const { Header } = Layout;
 
 const header = () => {
 
@@ -25,14 +25,14 @@ const header = () => {
                 <a href="/login">
                   <Button type="default" icon={<LoginOutlined />} size="large" />
                 </a>
-                <a href="https://www.instagram.com/raiane_dev/" target='_blank'>
+                <a href="https://www.instagram.com/raiane_dev/" rel="noreferrer" target='_blank'>
                   <Button type="default" icon={<InstagramOutlined />} size="large" />
                 </a>
-                <a href="https://twitter.com/RaianeDev" target='_blank'>
+                <a href="https://twitter.com/RaianeDev" rel="noreferrer"  target='_blank'>
                   <Button type="default" icon={<TwitterOutlined />} size="large" />
                 </a>
 
-                <a href="https://github.com/Raiane-Dev" target='_blank'>
+                <a href="https://github.com/Raiane-Dev" rel="noreferrer"  target='_blank'>
                   <Button type="default" icon={<GithubOutlined />} size="large" />
                 </a>
               </Space>

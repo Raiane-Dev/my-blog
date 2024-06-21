@@ -1,11 +1,11 @@
-import { Breadcrumb, Divider, Row, Typography } from 'antd';
-import { Content } from "antd/es/layout/layout";
+import { Breadcrumb, Divider, Row, Layout, Typography } from 'antd';
 import { useEffect, useState } from "react";
-import apiService, { post } from "../services/apiService";
+import { get } from "../services/api_service";
 import { PostPattern } from '../models/post';
 import { RenderHTML } from './Render';
 import { Link, useParams } from 'react-router-dom';
 
+const { Content } = Layout;
 
 const Article = () => {
 
@@ -13,12 +13,12 @@ const Article = () => {
     const { post_id } = useParams();
 
     const Post = () => {
-        apiService.get("/post/" + post_id)
+        get("/post/" + post_id)
             .then(response => {
                 setData(response.data);
             })
-            .catch(error => {
-                console.log(error);
+            .catch(err => {
+                console.log(err);
             })
     }
 

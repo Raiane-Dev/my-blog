@@ -1,13 +1,13 @@
-import { FC } from 'react';
-import apiService from "../services/apiService"
+import { post } from "../services/api_service"
 import { Button, Form, Input, Layout, Space, Typography, notification } from 'antd';
 import { SmileOutlined, MehOutlined } from '@ant-design/icons';
 import AccountInput from '../models/account';
-import { Content } from 'antd/es/layout/layout';
 
-const Login: FC = () => {
+const { Content } = Layout;
+
+const Login = () => {
     const onFinish = (values: any) => {
-        apiService.post(
+        post(
             "/login",
             values
         ).then((response: any) => {
