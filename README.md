@@ -26,13 +26,15 @@
 </p>
 <br />
 
-🚀 Tecnologias Utilizadas
-Rust: Porque segurança e performance nunca são demais.
-React: Porque fazer interfaces de usuário é chato (e porque o HTML por si só é muito cringe).
+🚀 Tecnologias Utilizadas <br />
+<br />Rust: Porque segurança e performance nunca são demais.
+<br />React: Porque fazer interfaces de usuário é chato (e porque o HTML por si só é muito cringe).
+
 <br><br>
-🎯 Objetivos do Projeto
-Aprender Rust: Agora posso comparar golang e rust, já que tenho experiência em ambos.
-Compartilhar Conhecimentos: Ao final, a ideia é que todos possamos rir, chorar e aprender juntos com as aventuras e desventuras da carreira.
+
+🎯 Objetivos do Projeto<br />
+<br />Aprender Rust: Agora posso comparar golang e rust, já que tenho experiência em ambos.
+<br />Compartilhar Conhecimentos: Ao final, a ideia é que todos possamos rir, chorar e aprender juntos com as aventuras e desventuras da carreira.
 
 ## Pré-requisitos:
 
