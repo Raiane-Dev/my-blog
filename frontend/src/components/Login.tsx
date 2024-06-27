@@ -33,7 +33,7 @@ const Login = () => {
                     <Content className='w100 h100 alg-center jst-center login'>
                         <Form
                             name="basic"
-                            className='box'
+                            className='component-login'
                             layout="vertical"
                             onFinish={onFinish}
                             autoComplete="on"

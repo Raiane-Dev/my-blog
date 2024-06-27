@@ -40,7 +40,7 @@ const Home = () => {
             <Content className='content'>
                 <Row gutter={16} justify="space-between" align="top">
                     {data.length > 0 ?? data.map((post: any) => (
-                    <Col span={8} style={{ marginBottom: "1em" }}>
+                    <Col xs={20} sm={8} span={8} style={{ marginBottom: "1em" }}>
                         <a href={"/post/" + post.id}>
                             <Card
                                 cover={<img alt={post.image_path} src={"/images/" + post.image_path} />}

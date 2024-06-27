@@ -11,7 +11,7 @@ use rocket::http::{Cookie, CookieJar};
 use rocket::request::{self, FromRequest, Outcome, Request};
 use rocket::serde::json::serde_json;
 use rocket::serde::json::Json;
-
+use std::env;
 use serde::Deserialize;
 
 #[rocket::async_trait]
@@ -19,21 +19,25 @@ impl<'r> FromRequest<'r> for JWT {
     type Error = NetworkResponse;
 
     async fn from_request(req: &'r Request<'_>) -> request::Outcome<Self, NetworkResponse> {
-        fn is_valid(key: &str) -> Result<Claims, Error> {
+        fn is_valid(token: &str) -> Result<Claims, Error> {
+            let secret = env::var("JWT_SECRET").expect("JWT_SECRET must be set.");
+            let validation = Validation::new(Algorithm::HS512);
+
             let token_data: TokenData<Claims> = decode::<Claims>(
-                key,
-                &DecodingKey::from_secret("secret".as_ref()),
-                &Validation::default(),
+                token,
+                &DecodingKey::from_secret(secret.as_bytes()),
+                &validation,
             )?;
+
             Ok(token_data.claims)
         }
 
-        match req.headers().get_one("authorization") {
+        match req.cookies().get("x-access-token") {
             None => Outcome::Error((
                 Status::Unauthorized,
                 NetworkResponse::Unauthorized("Not authorized".to_string()),
             )),
-            Some(key) => match is_valid(key) {
+            Some(cookie) => match is_valid(cookie.value()) {
                 Ok(claims) => Outcome::Success(JWT { claims }),
                 Err(err) => {
                     println!("{}", err);
@@ -55,6 +59,7 @@ impl<'r> FromRequest<'r> for JWT {
 
 #[get("/check-auth")]
 pub async fn check_auth(_auth: JWT) -> Result<String, NetworkResponse> {
+    println!("{:?}", _auth);
     let response = Response {
         body: ResponseBody::Message("check".to_string()),
     };

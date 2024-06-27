@@ -10,9 +10,9 @@ const header = () => {
       <Layout>
         <Header className='header'>
           <Row>
-            <Col span={8}></Col>
+            <Col span={8} xs={0} sm={8}></Col>
 
-            <Col span={8}>
+            <Col span={8} xs={20} sm={8}>
               <a href="/">
                 <Typography.Title>
                   Raiane Dev
@@ -20,7 +20,7 @@ const header = () => {
               </a>
             </Col>
 
-            <Col span={8} className='fcenter'>
+            <Col span={8} xs={20} sm={8} className='fcenter icons-header'>
               <Space align='center'>
                 <a href="/login">
                   <Button type="default" icon={<LoginOutlined />} size="large" />

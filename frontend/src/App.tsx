@@ -1,4 +1,5 @@
 import './App.less'
+import './AppMobile.less'
 import { BrowserRouter } from "react-router-dom";
 import { ConfigProvider, Layout } from 'antd';
 import { Routes, Route, Outlet } from 'react-router-dom';
@@ -13,6 +14,7 @@ import FormPost from './components/CreatePost';
 import ListPosts from './components/ListPosts';
 import Sidebar from './components/Sidebar';
 import { useEffect, useState } from 'react';
+import NotFound from './components/NotFound';
 
 const App = () => {
 
@@ -51,6 +53,7 @@ const App = () => {
   const [authenticated, setAuthenticated] = useState(false);
 
   async function isAuthenticated() {
+    console.log('test');
     get("/check-auth")
       .then(() => setAuthenticated(true))
       .catch(() => setAuthenticated(false));
@@ -58,7 +61,7 @@ const App = () => {
 
   useEffect(() => {
     isAuthenticated();
-  }, []);
+  }, [authenticated]);
 
 
   return (
@@ -72,13 +75,15 @@ const App = () => {
               <Route path="/post/:post_id" element={<Article />} />
             </Route>
 
-            {authenticated ?? (
+            {authenticated &&
               <Route path="/dashboard" element={<BodyPrivate />}>
                 <Route path="/dashboard/home" element={<></>} />
                 <Route path="/dashboard/create-post" element={<FormPost />} />
                 <Route path="/dashboard/list-posts" element={<ListPosts />} />
               </Route>
-            )}
+            }
+
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </>
