@@ -53,7 +53,6 @@ const App = () => {
   const [authenticated, setAuthenticated] = useState(false);
 
   async function isAuthenticated() {
-    console.log('test');
     get("/check-auth")
       .then(() => setAuthenticated(true))
       .catch(() => setAuthenticated(false));

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Breadcrumb, Card, Col, Divider, Row, Typography } from 'antd';
 import { Content } from "antd/es/layout/layout";
 import { get } from "../services/api_service";
@@ -10,17 +10,15 @@ const Home = () => {
     const [data, setData] = useState([]);
 
 
-    const Posts = () => {
+    useEffect(() => {
         get("/posts")
             .then(response => {
                 setData(response.data);
             })
             .catch(err => {
-                console.log(err);
-            })
-    }
-
-    Posts();
+                console.log(err)
+            });
+    }, []);
 
 
     return (
@@ -39,7 +37,7 @@ const Home = () => {
 
             <Content className='content'>
                 <Row gutter={16} justify="space-between" align="top">
-                    {data.length > 0 ?? data.map((post: any) => (
+                    {data.map((post: any) => (
                     <Col xs={20} sm={8} span={8} style={{ marginBottom: "1em" }}>
                         <a href={"/post/" + post.id}>
                             <Card

@@ -59,7 +59,6 @@ impl<'r> FromRequest<'r> for JWT {
 
 #[get("/check-auth")]
 pub async fn check_auth(_auth: JWT) -> Result<String, NetworkResponse> {
-    println!("{:?}", _auth);
     let response = Response {
         body: ResponseBody::Message("check".to_string()),
     };
