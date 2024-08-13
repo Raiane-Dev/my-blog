@@ -1,14 +1,14 @@
-FROM node:latest AS interface
+FROM oven/bun:latest AS interface
 
 WORKDIR /usr/src/app
 
-COPY frontend/package.json frontend/yarn.lock ./
+COPY frontend/package.json frontend/bun.lockb ./
 
-RUN yarn
+RUN bun install
 
 COPY ./frontend .
 
-RUN yarn build:prod
+RUN bun run compiler
 
 FROM rust:latest as build
 
@@ -35,7 +35,7 @@ WORKDIR /my_blog
 
 ## execs
 COPY --from=build /usr/src/my_blog/target/release/my_blog .
-COPY --from=interface /usr/src/app/build ./public/
+COPY --from=interface /usr/src/app/dist ./public/
 
 # assets
 COPY myblog.service .

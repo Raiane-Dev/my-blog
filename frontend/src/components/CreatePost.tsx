@@ -139,7 +139,7 @@ const FormPost = () => {
                             editor={ClassicEditor}
                             data=""
                             config={custom_config}
-                            onChange={(_, editor) => {
+                            onChange={(_: any, editor: any) => {
                                 const data = editor.getData();
                                 form.setFieldsValue({ body: data });
                             }}

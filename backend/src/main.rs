@@ -32,7 +32,7 @@ async fn index() -> Option<NamedFile> {
 
 #[get("/<file..>", rank=1)]
 async fn files(file: PathBuf) -> Option<NamedFile> {
-    NamedFile::open(Path::new("public/static/").join(file)).await.ok()
+    NamedFile::open(Path::new("public/assets/").join(file)).await.ok()
 }
 
 #[rocket::main]
@@ -59,7 +59,7 @@ async fn main() -> Result<(), rocket::Error> {
                 controller::auth_controller::check_auth,
             ],
         )
-        .mount("/static", routes![files,])
+        .mount("/assets", routes![files,])
         .mount("/", routes![index,])
         .configure(rocket::Config::figment().merge(("port", server_port.parse::<u16>().unwrap())))
         .launch()

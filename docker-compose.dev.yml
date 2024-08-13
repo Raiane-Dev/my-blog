@@ -7,7 +7,7 @@ services:
       - ./backend/.env.dev
     volumes:
     - ./backend/:/usr/src/my_blog
-    - ./frontend/build/:/usr/src/my_blog/public
+    - ./frontend/dist/:/usr/src/my_blog/public
     tty: true
     stdin_open: true
     restart: always
@@ -25,10 +25,12 @@ services:
 
   frontend:
     container_name: frontend
-    image: node:22.3.0
+    image: oven/bun:1.1
+    working_dir: /app
     volumes:
       - ./frontend/:/app
     tty: true
     stdin_open: true
+    command: "/bin/bash"
     restart: always
     network_mode: host
